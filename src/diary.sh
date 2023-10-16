@@ -29,7 +29,7 @@ eval set -- "$Options"
 if [ $1 == "-T" ];
 then
 	#更改目录到脚本所在目录和名称
-	FilePath="."
+	FilePath="../temp"
 	FileName="test."$FileName
 
 	#输出变量
@@ -110,7 +110,7 @@ then
 
 	# 设置权限
 	chmod $NewChangeMode $FileLocation
-	echo "$Date $Time">>$FileLocation
+	echo "$Date $(date +%A) $Time">>$FileLocation
 fi
 
 # 用编辑器打开文件
