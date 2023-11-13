@@ -26,29 +26,29 @@ fi
 eval set -- "$Options"
 
 # 测试模式
-if [ $1 == "-T" ];
-then
-	#更改目录到脚本所在目录和名称
-	FilePath="../temp"
-	FileName="test."$FileName
+# if [ $1 == "-T" ];
+# then
+# 	#更改目录到脚本所在目录和名称
+# 	FilePath="../temp"
+# 	FileName="test."$FileName
 
-	#输出变量
-	echo Date: $Date
-	echo Time: $Time
-	echo Name: $FileName
-	echo Path: $FilePath
-	echo EditorExec: $EditorExec
-	echo Filemode: $NewChangeMode
-	echo Option: $@
+# 	#输出变量
+# 	echo Date: $Date
+# 	echo Time: $Time
+# 	echo Name: $FileName
+# 	echo Path: $FilePath
+# 	echo EditorExec: $EditorExec
+# 	echo Filemode: $NewChangeMode
+# 	echo Option: $@
 
-	#让人能看见输出，留出反应的时间
-	read -p "按回车确认参数" -s
-	#read -p是不加换行的，自己打印一个空行
-	echo ""
+# 	#让人能看见输出，留出反应的时间
+# 	read -p "按回车确认参数" -s
+# 	#read -p是不加换行的，自己打印一个空行
+# 	echo ""
 
-	# 将变量移到下一位，不让后面的case重复检测
-	shift
-fi
+# 	# 将变量移到下一位，不让后面的case重复检测
+# 	shift
+# fi
 
 
 # 主程序
@@ -76,7 +76,7 @@ do
 		-h | --help)
 			echo "这是一个快速创建日记的脚本"
 			echo "创建新文件时会默认加入当前日期与时间"
-			echo "-T 测试模式（仅第一位参数可用）"
+			echo "[无效]-T 测试模式（仅第一位参数可用）"
 			echo "-t 插入当前时间"
 			echo "-d 删除当前文件"
 			echo "--help 查看有效的选项们"
@@ -102,7 +102,7 @@ if [ ! -f $FileLocation ];
 then
 	# 如果文件不存在
 	# 创建文件
-	touch $FileLocation
+	touch $FileLocation || exit 1
 	if [ ! $? -eq 0 ];
 	then
 		echo "无法创建文件"
@@ -115,11 +115,6 @@ then
 fi
 
 # 用编辑器打开文件
-$EditorExec $FileLocation
-if [ ! $? -eq 0 ];
-then
-	echo "编辑器报错"
-	exit 10
-fi
+$EditorExec $FileLocation || exit 1
 
 exit 0
