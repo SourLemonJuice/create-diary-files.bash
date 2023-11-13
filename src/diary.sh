@@ -61,8 +61,8 @@ do
 	case $1 in
 		-t)
 			# 如果加入参数则插入 换行 时间
-			echo "">>$FileLocation
-			echo "$Time">>$FileLocation
+			echo "">>$FileLocation || exit 1
+			echo "$Time">>$FileLocation || exit 1
 		;;
 		-d)
 			echo "删除操作"
@@ -70,7 +70,7 @@ do
 			read -p "按回车键删除\"$FileLocation\"" -s
 			#read -p是不加换行的，自己打印一个空行
 			echo ""
-			rm $FileLocation
+			rm $FileLocation || exit 1
 			exit 0
 		;;
 		-h | --help)
@@ -110,8 +110,8 @@ then
 	fi
 
 	# 设置权限
-	chmod $NewChangeMode $FileLocation
-	echo "$Date $(date +%A) $Time">>$FileLocation
+	chmod $NewChangeMode $FileLocation || exit 1
+	echo "$Date $(date +%A) $Time">>$FileLocation || exit 1
 fi
 
 # 用编辑器打开文件
