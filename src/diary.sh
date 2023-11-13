@@ -15,7 +15,7 @@ EditorExec="vim"
 NewChangeMode="664"
 
 # 输入选项
-Options=$(getopt -o Ttd -l help -- "$@")
+Options=$(getopt -o hTtd -l help -- "$@")
 # 如果有错误参数导致getopt报错则退出
 if [ ! $? -eq 0 ];
 then
@@ -60,7 +60,8 @@ while true;
 do
 	case $1 in
 		-t)
-			# 如果加入参数则插入时间
+			# 如果加入参数则插入 换行 时间
+			echo "">>$FileLocation
 			echo "$Time">>$FileLocation
 		;;
 		-d)
@@ -72,7 +73,7 @@ do
 			rm $FileLocation
 			exit 0
 		;;
-		--help)
+		-h | --help)
 			echo "这是一个快速创建日记的脚本"
 			echo "创建新文件时会默认加入当前日期与时间"
 			echo "-T 测试模式（仅第一位参数可用）"
