@@ -10,6 +10,9 @@ FileName="$Date.txt"
 #文件们应该都放在哪里
 FilePath="./"
 #要使用的文本编辑器
+# 可以正常释放参数，比如 "vim --opt"
+# 不过请注意启动编辑器时使用的是 exec 命令，emm...不要搞出注入'攻击'就好，比如以 "-a xxx, -c, -l" 开头，详细参数可以执行 $(exec --help) 查看
+# 脚本会将文件路径接在字符串的最后面，比如 "vim --opt /file.txt"
 EditorExec="vim"
 #新文件的权限
 NewChangeMode="664"
@@ -61,8 +64,8 @@ do
 	case $1 in
 		-t)
 			# 如果加入参数则插入 换行 时间
-			echo "">>$FileLocation || exit 1
-			echo "$Time">>$FileLocation || exit 1
+			echo "">>"$FileLocation" || exit 1
+			echo "$Time">>"$FileLocation" || exit 1
 		;;
 		-d)
 			echo "删除操作"
@@ -70,7 +73,7 @@ do
 			read -p "按回车键删除\"$FileLocation\"" -s
 			#read -p是不加换行的，自己打印一个空行
 			echo ""
-			rm $FileLocation || exit 1
+			rm "$FileLocation" || exit 1
 			exit 0
 		;;
 		-h | --help)
@@ -98,11 +101,11 @@ done
 # 通用的逻辑
 
 # 创建文件
-if [ ! -f $FileLocation ];
+if [ ! -f "$FileLocation" ];
 then
 	# 如果文件不存在
 	# 创建文件
-	touch $FileLocation || exit 1
+	touch "$FileLocation" || exit 1
 	if [ ! $? -eq 0 ];
 	then
 		echo "无法创建文件"
@@ -110,11 +113,11 @@ then
 	fi
 
 	# 设置权限
-	chmod $NewChangeMode $FileLocation || exit 1
-	echo "$Date $(date +%A) $Time">>$FileLocation || exit 1
+	chmod $NewChangeMode "$FileLocation" || exit 1
+	echo "$Date $(date +%A) $Time">>"$FileLocation" || exit 1
 fi
 
 # 用编辑器打开文件
-$EditorExec $FileLocation || exit 1
-
-exit 0
+# 注: exec 会将当前脚本解释器的进程替换为编辑器进程
+# 所以它后面的语句永远不会被执行，也不需要关心传递返回码的问题
+exec $EditorExec "$FileLocation"
