@@ -1,5 +1,5 @@
 #!/bin/bash
-# SourLemonJuice
+# This is free and unencumbered software released into the public domain.
 
 #获取日期
 Date=$(date +"%F")
