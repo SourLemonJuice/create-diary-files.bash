@@ -15,7 +15,7 @@ FilePath="./"
 # 脚本会将文件路径接在字符串的最后面，比如 "vim --opt /file.txt"
 EditorExec="vim"
 #新文件的权限
-NewChangeMode="664"
+NewFilePermission="644"
 
 # 输入选项
 Options=$(getopt -o hTtd -l help -- "$@")
@@ -113,7 +113,7 @@ then
 	fi
 
 	# 设置权限
-	chmod $NewChangeMode "$FileLocation" || exit 1
+	chmod $NewFilePermission "$FileLocation" || exit 1
 	echo "$Date $(date +%A) $Time">>"$FileLocation" || exit 1
 fi
 
