@@ -11,7 +11,7 @@ FileName="$Date.txt"
 FilePath="./"
 # 要使用的文本编辑器
 # 可以正常释放参数，比如 "vim --opt"
-# 不过请注意启动编辑器时使用的是 exec 命令，emm...不要搞出注入'攻击'就好，比如以 "-a xxx, -c, -l" 开头，详细参数可以执行 $(exec --help) 查看
+# 启动编辑器时使用的是 exec 命令，但不用担心搞出注入'攻击'，比如字符串以 "-a xxx, -c, -l" 开头，因为最终用的是 `exec -- $var`
 # 脚本会将文件路径接在字符串的最后面，比如 "vim --opt /file.txt"
 EditorExec="vim"
 # 文件的权限（每次编辑时更改）
@@ -120,4 +120,4 @@ fi
 # 用编辑器打开文件
 # 注: exec 会将当前脚本解释器的进程替换为编辑器进程
 # 所以它后面的语句永远不会被执行，也不需要关心传递返回码的问题
-exec $EditorExec "$FileLocation"
+exec -- $EditorExec "$FileLocation"
