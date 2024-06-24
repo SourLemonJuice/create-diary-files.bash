@@ -18,7 +18,7 @@ EditorExec="vim"
 NewFilePermission="640"
 
 # 输入选项
-Options=$(getopt -o hTtd -l help -- "$@")
+Options=$(getopt -o hTtd -l help -l time -l delete -- "$@")
 # 如果有错误参数导致getopt报错则退出
 if [ ! $? -eq 0 ];
 then
@@ -62,17 +62,23 @@ FileLocation="$FilePath/$FileName"
 while true;
 do
     case $1 in
-        -t)
+        -t | --time)
+            if [[ ! -f "${FileLocation}" ]]; then
+                echo "diary.bash: 没有匹配的文件，需要先创建当今的日记（以无参数运行）"
+                exit 1
+            fi
             # 如果加入参数则插入 换行 时间
             echo "">>"$FileLocation" || exit 1
             echo "==== $Time ====">>"$FileLocation" || exit 1
         ;;
-        -d)
-            echo "diary.bash: 正在执行删除操作"
+        -d | --delete)
+            if [[ ! -f "${FileLocation}" ]]; then
+                echo "diary.bash: 没有匹配的文件，需要先创建当今的日记（以无参数运行）"
+                exit 1
+            fi
             # 最后确认
-            read -p "按回车键删除\"$FileLocation\"" -s
+            echo "diary.bash: 即将调用 rm 删除\"$FileLocation\""
             # read -p是不加换行的，自己打印一个空行
-            echo ""
             rm -i "$FileLocation" || exit 1
             exit 0
         ;;
@@ -80,9 +86,9 @@ do
             echo "这是一个用于快速记录日记的脚本"
             echo "创建新文件时会默认加入当前日期与时间"
             echo "[已弃用] -T 测试模式（仅第一位参数可用）"
-            echo "-t 插入当前时间"
-            echo "-d 删除当前文件"
-            echo "--help 查看有效的选项们（本页面）"
+            echo "-t | --time 插入当前时间"
+            echo "-d | --delete 删除当前文件"
+            echo "-h | --help 查看有效的选项们（本页面）"
             exit 0
         ;;
         --)
