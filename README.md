@@ -28,6 +28,10 @@ ${FilePath}
 `EditorExec`则为启动编辑器的命令，要编辑的文件路径会被加在命令的最后，也只能加在最后\
 `NewFilePermission`是创建文件的权限`chmod $NewFilePermission "$FileLocation"`
 
+## 命令行中的用法
+
+没什么，详情可以看 `--help` 后的输出
+
 ## License
 
 This is free and unencumbered software released into the public domain.
